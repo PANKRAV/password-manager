@@ -1134,7 +1134,8 @@ def main():
 
         print(type(mode))
         print(os.listdir())
-        
+        dirs = os.listdir()
+
         if mode == 1:
             name = input("name:")
             while True:
@@ -1193,7 +1194,7 @@ def main():
 
                     while True:
 
-                        if in_key == _user.key:
+                        if _user.check_key(in_key) == True:
 
 
                             #self.__call__() to check if key is valid
@@ -1269,6 +1270,7 @@ def main():
 
 
                     in_key = input("give key:")
+                    
 
                     while True:
 
