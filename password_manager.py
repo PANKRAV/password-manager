@@ -974,6 +974,7 @@ def quit():
 class encryption:
 
 
+    #indent < 72
     @staticmethod
     def ceasar(ctx, indent : int = 0) -> str:
         ctx = list(ctx)
