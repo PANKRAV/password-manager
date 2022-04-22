@@ -60,7 +60,8 @@ async def minimal_time(func, delay : int):
     asyncio.gather(*tasks)
 
 
-#aaaa
+
+
 
 class User:
     global key
@@ -1170,7 +1171,7 @@ def main():
                 mode = input("Input needs to be a number")
 
 
-#
+
 
 
         print(type(mode))
