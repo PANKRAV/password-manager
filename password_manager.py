@@ -977,7 +977,7 @@ class encryption:
     def ceasar(ctx, indent : int = 0) -> str:
         ctx = list(ctx)
 
-        for char, idx in enumerate(ctx):
+        for idx, char in enumerate(ctx):
 
             char:str
             if char.isupper():
