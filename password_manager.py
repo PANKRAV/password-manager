@@ -972,6 +972,45 @@ def quit():
 
 class encryption:
 
+
+    @staticmethod
+    def ceasar(ctx, indent : int = 0) -> str:
+        ctx = list(ctx)
+
+        for char, idx in enumerate(ctx):
+
+            char:str
+            if char.isupper():
+                #chars was assigned at line 22
+                _index = chars.index(char)
+
+                try:
+                    new_char = chars[_index + indent]
+                
+                except IndexError:
+                    if _index + indent > 72:
+                        new_char = chars[indent]
+                    
+                    elif _index + indent < 0:
+                        new_char = chars[72 - indent]
+
+                ctx[idx] = new_char
+    
+
+        return "".join(ctx)
+
+
+
+    
+    @staticmethod
+    def reverse_ceasar(ctx, indent : int = 0) -> str:
+
+        return encryption.ceasar(ctx , -indent)
+
+            
+
+
+
     @staticmethod
     def standard(ctx):
         pass
