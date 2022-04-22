@@ -1,2 +1,3 @@
-
+data/passwords/
+data/users.json
 .env
