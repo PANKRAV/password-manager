@@ -24,6 +24,7 @@ lower = "abcdefghijklmnopqrstuvwxyz"
 upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 numbers = "0123456789"
 symbols = "!@#$%^&*()"
+ran_char_seq = "hA#Fm&s%)0YanG$gQ3xylpvjB9f^M17S6eRCuqDZiwK*Ub!TLot4XV8@HONJ2rE5IcW(zdPk"
 
 users_data = dict({})
 
@@ -980,19 +981,19 @@ class encryption:
         for idx, char in enumerate(ctx):
 
             char:str
-            if char.isupper():
+            if not char.isspace():
                 #chars was assigned at line 22
-                _index = chars.index(char)
+                _index = ran_char_seq.index(char)
 
                 try:
-                    new_char = chars[_index + indent]
+                    new_char = ran_char_seq[_index + indent]
                 
                 except IndexError:
                     if _index + indent > 72:
-                        new_char = chars[indent]
+                        new_char = ran_char_seq[indent]
                     
                     elif _index + indent < 0:
-                        new_char = chars[72 - indent]
+                        new_char = ran_char_seq[72 - indent]
 
                 ctx[idx] = new_char
     
