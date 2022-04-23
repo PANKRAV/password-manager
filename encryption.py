@@ -1,7 +1,16 @@
-import hashlib
+#modules
 from numpy import random as nprand
-from hashlib import sha512, sha3_512
+from hashlib import sha256
+import rsa
+from secrets import choice
+import cryptography
+from base64 import encode
+import hashlib
 
+
+
+
+#consts
 chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()"
 lower = "abcdefghijklmnopqrstuvwxyz"
 upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -9,9 +18,17 @@ numbers = "0123456789"
 symbols = "!@#$%^&*()"
 ran_char_seq = 'hA#Fm&s%)0YanG$gQ3xylpvjB9f^M17S6eRCuqDZiwK*Ub!TLot4XV8@HONJ2rE5IcW(zdPk'   
 
+
+
+
+
+
+
 def ceasar(ctx, indent : int = 0) -> str:
     ctx = list(ctx)
+
     for idx, char in enumerate(ctx):
+
         char:str
         if not char.isspace():
             #ran_char_seq =  was assigned at line 22
@@ -31,8 +48,26 @@ def ceasar(ctx, indent : int = 0) -> str:
 
 
 def reverse_ceasar(ctx, indent : int = 0) -> str:
+
     return ceasar(ctx , -indent)
         
+
+
+
+
+
+
+
+    
+def enc_rsa(ctx):
+    pass
+
+
+    
+def placeholder(ctx):
+    pass
+
+
 
 def standard(ctx):
     pass
@@ -43,6 +78,13 @@ def trigonometric(ctx):
 def random(ctx):
     pass
 
+
+
+
+
+
+
+#hash processes
 def hash2(ctx) -> str:
     byte_data = ctx.encode()
     return hashlib.sha512(byte_data).hexdigest()
@@ -54,6 +96,10 @@ def hash3(ctx) -> str:
 def salt(ctx : str) -> str:
     salt = random_password(5)
     return ctx + salt
+
+
+
+
 
 
 
@@ -89,8 +135,8 @@ def random_password(length = 10):
     password = nprand.choice(char_list, p = pr, size = length) 
 
     return "".join(password)
-input()
-while True:
-    txt = ceasar(input(), 3)
-    print(txt)
-    print(reverse_ceasar(txt, 3))
+
+
+
+
+

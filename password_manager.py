@@ -12,6 +12,7 @@ from cgitb import text
 from msilib.schema import Error
 import math
 from ast import Pass
+import pyautogui as pg
 
 
 #cryptography
@@ -22,7 +23,8 @@ from secrets import choice
 import cryptography
 from base64 import encode
 import hashlib
-
+#user defined
+import encryption
 
 
 
@@ -979,6 +981,7 @@ def quit():
 
 
 
+"""
 
 class encryption:
 
@@ -1062,6 +1065,7 @@ class encryption:
         salt = random_password(5)
         return ctx + salt
 
+"""
 
 
 
