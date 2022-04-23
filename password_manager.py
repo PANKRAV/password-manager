@@ -217,7 +217,7 @@ choice:"""
 )
 
 
-        
+
 
             while not isinstance(mode, int) or not (str(mode) in ["1", "2"]):
 
@@ -225,7 +225,7 @@ choice:"""
                     mode = int(mode)
                     if not (mode in [1, 2]):
                         mode = int(input("Input needs to be a number between 1 and 2:"))
-                
+
                 except ValueError:
                     mode = input("Input needs to be a number:")
 
@@ -253,7 +253,7 @@ choice:"""
                 if  not choice.upper() == "YES":
                     break
 
-            
+
 
 
 
@@ -321,7 +321,7 @@ choice:"""
                     change = int(change)
                     if not (change in [1, 2, 3, 4, 5]):
                         change = int(input("Input needs to be a number between 1 and 5:"))
-                
+
                 except ValueError:
                     change = input("Input needs to be a number:")
 
@@ -346,7 +346,7 @@ choice:"""
             elif change == 2:
 
                 while True:
-                    
+
                     change_text = input("new email:")
 
                     if change_text != change_text.rstrip():
@@ -354,7 +354,7 @@ choice:"""
 
                     else:
                         break
-        
+
 
 
 
@@ -365,12 +365,12 @@ choice:"""
                 change_text = input("new username:")
 
                 _json[acc_name]["username"] = change_text
-                
+
 
 
             elif change == 4:
-                
-                
+
+
                 while True:
 
                     mode = input(
@@ -379,13 +379,13 @@ choice:"""
 1.random password
 2.chooce a password
 choice:"""
-)           
+)
 
 
-            
 
 
-        
+
+
                     #minimized
                     while not isinstance(mode, int) or not (str(mode) in ["1", "2"]):
 
@@ -458,7 +458,7 @@ choice:"""
                     done = int(done)
                     if not (done in [1, 2]):
                         done = int(input("Input needs to be a number between 1 and 3:"))
-                
+
                 except ValueError:
                     done = input("Input needs to be a number:")
 
@@ -467,7 +467,7 @@ choice:"""
             if done == 1:
                 
                 os.system('cls||clear')
-                
+
                 break
 
 
@@ -565,7 +565,7 @@ give another name:"""
         for index, account in enumerate(_json, start = 1) :
             print(f"{index}.{account}")
 
-        
+
 
         input("done? :")
 
@@ -592,7 +592,7 @@ give another name:"""
 
 
 
-    
+
 
     def check_key(self, key, hash_type = 3) -> bool:
 
@@ -601,10 +601,10 @@ give another name:"""
             key = encryption.hash3(key)
         elif hash_type == 2:
             key = encryption.hash2(key)
-            
 
 
-        
+
+
         if key == self.key:
             return True
 
@@ -617,11 +617,11 @@ give another name:"""
 
 
 
-        
 
 
 
-        
+
+
 
 
 
@@ -698,7 +698,7 @@ choice:"""
             elif mode == 9:
                 break
 
-            
+
 
 
 
@@ -725,28 +725,28 @@ choice:"""
 
             os.chdir("..")
 
-            
+
             with open("users.json", "r") as f:
                 f = f.read()
                 _json = json.loads(f)
                 _key = _json[user[:-5]]["key"]
                 _salt = _json[user[:-5]]["salt"]
 
-            
+
             os.chdir("passwords")
 
             users_data[user[:-5]] = User(user[:-5], passwords = pw_cnt, key = _key, salt = _salt)  
 
-        
-          
+
+
 
         return users_data 
 
 
 
-        
-        
-        
+
+
+
 
 
 
@@ -793,18 +793,18 @@ class Password:
 
             _json = handle_file(self.file, "json read")
             _json = _json[self.acc_name]
-            
-            
+
+
             self.username = _json["username"]
             self.password = _json["pwd"]
             self.email = _json["email"]
 
 
-        
 
 
 
-    
+
+
         def __repr__(self):
 
             if self.owner.name[:-1].upper() == "S":
@@ -837,7 +837,6 @@ User: {self.owner.name}\'
             pass
 
 
-    
 
 
 
@@ -845,12 +844,13 @@ User: {self.owner.name}\'
 
 
 
-    
 
 
 
-    
-    
+
+
+
+
 
 
 
@@ -895,15 +895,15 @@ def init():
     os.chdir("passwords")
 
 
-        
+
     users_data = User.create_users()
 
 
-    
+
 
     dirs = os.listdir()
-    
-    
+
+
 
 
 
@@ -922,7 +922,7 @@ def user_init(name, key = None):
             _json = json.dumps({})
             f.write(_json)
 
-    
+
     os.chdir("..")
 
     with open("users.json", mode = "r") as in_f:
@@ -934,18 +934,18 @@ def user_init(name, key = None):
         _json[name]["salt"] = salt
         _json = json.dumps(_json)
 
-    
+
     with open("users.json", mode = "w") as out_f:
         out_f.write(_json)
 
     users_data[name] = User(name, key = key, salt = salt)
-    
 
-    
+
+
 
     os.chdir("passwords")
-        
-        
+
+
 
 
 
@@ -971,10 +971,10 @@ def quit():
 
 
     sys.exit()
-    
 
-    
-        
+
+
+
 
 
 
@@ -1006,20 +1006,28 @@ class encryption:
                         new_char = ran_char_seq[72 - indent]
 
                 ctx[idx] = new_char
-    
+
 
         return "".join(ctx)
 
 
 
-    
+
     @staticmethod
     def reverse_ceasar(ctx, indent : int = 0) -> str:
 
         return encryption.ceasar(ctx , -indent)
 
-            
 
+
+    @staticmethod
+    def enc_rsa(ctx):
+        pass
+
+
+    @staticmethod
+    def placeholder(ctx):
+        pass
 
 
     @staticmethod
@@ -1053,11 +1061,11 @@ class encryption:
     def salt(ctx : str) -> str:
         salt = random_password(5)
         return ctx + salt
-    
 
 
 
-   
+
+
 
 
 #opt = norm or json or  json create or norm create
@@ -1090,7 +1098,7 @@ def handle_file(path, opt: str, content = "") -> dict:
 
 
     elif opt == "json modify":
-        
+
         _json = handle_file(path, "json read")
 
 
@@ -1145,11 +1153,11 @@ def random_password(length = 10):
         elif char in numbers_list:
             pr.append(0.3/len(numbers_list)) 
 
-        
+
         elif char in symbols_list:
             pr.append(0.3/len(symbols_list)) 
 
-        
+
     password = nprand.choice(char_list, p = pr, size = length) 
 
     return "".join(password)
@@ -1220,7 +1228,7 @@ def main():
 
         if mode == 2:
             dirs = os.listdir()
-            
+
 
 
             while True:
@@ -1320,7 +1328,7 @@ def main():
 
 
                     in_key = input("give key:")
-                    
+
 
                     while True:
 
@@ -1373,7 +1381,7 @@ def main():
 
 
 
-                
+
 
 
 
