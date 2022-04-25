@@ -24,7 +24,7 @@ import cryptography
 from base64 import encode
 import hashlib
 #user defined
-import encryption
+if __name__ == "__main__": import encryption
 
 
 
@@ -694,7 +694,7 @@ choice:"""
 
 
             elif mode == 8:
-                quit()
+                _quit()
 
 
             elif mode == 9:
@@ -878,12 +878,18 @@ def init():
 
 
 
+    if "encryption_data" not in dirs:
+        os.mkdir("encryption_data")
+
+
+
     if "data" not in dirs:
         os.mkdir("data")
     os.chdir("data")
     #print(os.getcwd())
-    
-    
+
+
+
     dirs = os.listdir()
     if "users.json" not in dirs:
         with pathlib.Path("users.json").open(mode = "w") as f:
@@ -966,7 +972,7 @@ def user_init(name, key = None):
 
 
 
-def quit():
+def _quit() -> None:
 
     #kialla polla pramata
 

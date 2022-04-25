@@ -1,4 +1,5 @@
 #modules
+#encryption
 from numpy import random as nprand
 from hashlib import sha256
 import rsa
@@ -6,8 +7,14 @@ from secrets import choice
 import cryptography
 from base64 import encode
 import hashlib
+from simplecrypt import encrypt, decrypt
+from cryptography.fernet import Fernet
 
 
+
+#utility
+if __name__ == "__main__" : from password_manager import handle_file
+from password_manager import User
 
 
 #consts
@@ -58,14 +65,71 @@ def reverse_ceasar(ctx, indent : int = 0) -> str:
 
 
 
+
+#FERNET
+
+
+#fernet_encrypt
+def enc_fernet(ctx) -> str:
+    f_in_key = Fernet.generate_key()
+    f_key = Fernet(f_in_key)
+    return f_key.encrypt(ctx.encode())
+
+
+#Fernet_decrypt
+def dec_fernet(f_key : Fernet, ctx) -> str:
+    return f_key.decrypt(ctx).decode()
+
+
+
+
+
+
+
+#First Step
+def simple_crypt(passkey : User.key, ctx, mode : str = "enc") -> str:
     
-def enc_rsa(ctx):
+    if mode == "enc":
+        return encrypt(passkey, ctx)
+
+    elif mode == "dec":
+        return decrypt(passkey, ctx)
+
+    else:
+        return None
+
+
+
+#Second Step
+def enc_rsa(ctx, inUser : User) -> str:
+    publicKey, privateKey = rsa.newkeys(512)
+
+    privateSafe = simple_crypt(inUser.key, privateKey)
+
+
+    encMessage = rsa.encrypt(ctx.encode(),
+                            publicKey)
+
+
+#third step    
+def placeholder(ctx) -> str:
     pass
 
 
-    
-def placeholder(ctx):
-    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
