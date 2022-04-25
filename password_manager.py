@@ -946,6 +946,19 @@ def user_init(name, key = None):
     with open("users.json", mode = "w") as out_f:
         out_f.write(_json)
 
+
+    
+    os.chdir("..")
+    os.chdir("encryption_data")
+    
+    with open(f"{name}.json", mode = "w") as f:
+        _json = json.dumps({})
+        f.write(_json)
+
+
+
+    os.chdir("..")
+    os.chdir("data")
     users_data[name] = User(name, key = key, salt = salt)
 
 

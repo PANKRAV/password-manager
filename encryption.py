@@ -87,7 +87,7 @@ def dec_fernet(f_key : Fernet, ctx) -> str:
 
 
 #First Step
-def simple_crypt(passkey : User.key, ctx, mode : str = "enc") -> str:
+def simple_crypt(passkey, ctx, mode : str = "enc") -> str:
     
     if mode == "enc":
         return encrypt(passkey, ctx)

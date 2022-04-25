@@ -1,4 +1,6 @@
 data/**
 .env
+encryption_data/**
+
 #modules
 __pycache__/
