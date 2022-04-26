@@ -1,5 +1,6 @@
 #modules
 #encryption
+from functools import singledispatchmethod
 from numpy import random as nprand
 from hashlib import sha256
 import rsa
@@ -100,7 +101,37 @@ def simple_crypt(passkey, ctx, mode : str = "enc") -> str:
 
 
 
-#Second Step
+class enc_rsa:
+
+    
+    def __init__(self, User : User, ctx):
+
+        publicKey, privateKey = rsa.newkeys(512)
+        self.User = User
+        self.privateSafe = simple_crypt(self.User.key, privateKey)
+        self.encContent = rsa.encrypt(ctx.encode(),
+                            publicKey)
+        
+        del publicKey, privateKey
+
+
+
+
+    def revert(self, ctx):
+        privateKey = simple_crypt(self.User.key, ctx, "dec")
+        return rsa.decrypt(ctx, privateKey).decode()
+
+
+
+
+
+
+
+
+
+
+
+
 def enc_rsa(ctx, inUser : User) -> str:
     publicKey, privateKey = rsa.newkeys(512)
 
