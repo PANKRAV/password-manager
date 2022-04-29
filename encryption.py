@@ -16,6 +16,7 @@ from cryptography.fernet import Fernet
 #utility
 if __name__ == "__main__" : from password_manager import handle_file
 from password_manager import User
+import os
 
 
 #consts
@@ -103,35 +104,76 @@ def simple_crypt(passkey, ctx, mode : str = "enc") -> str:
 
 class enc_rsa:
 
-    
-    def __init__(self, User : User, ctx):
-
-        publicKey, privateKey = rsa.newkeys(512)
-        self.User = User
-        self.privateSafe = simple_crypt(self.User.key, privateKey)
-        self.encContent = rsa.encrypt(ctx.encode(),
-                            publicKey)
-        
-        del publicKey, privateKey
 
 
 
-
-    def revert(self, ctx):
-        privateKey = simple_crypt(self.User.key, ctx, "dec")
-        return rsa.decrypt(ctx, privateKey).decode()
+    @staticmethod
+    class Single_pwd:
 
 
+        def __init__(self, ctx : str, enc_key):
+
+            publicKey, privateKey = rsa.newkeys(512)
+            self.enc_key = enc_key
+            self.privateSafe = simple_crypt(self.User.key, privateKey)
+            self.encContent = rsa.encrypt(ctx.encode(),
+                                publicKey)
+            
+            del publicKey, privateKey
 
 
 
-
-
+        def revert(self, ctx):
+            privateKey = simple_crypt(self.User.key, ctx, "dec")
+            return rsa.decrypt(ctx, privateKey).decode()
 
 
 
 
 
+
+    @staticmethod
+    class User_pwd():
+
+
+
+        def __init__(self, User : User, enc_key):
+
+            publicKey, privateKey = rsa.newkeys(2048)
+            self.enc_key = enc_key
+            self.User = User
+            self.privateSafe = simple_crypt(self.User.key, privateKey)
+            self.puclicSafe = simple_crypt(self.User.key, publicKey)
+
+            self.reset()
+
+
+
+
+            del publicKey, privateKey
+
+
+
+        def reset(self):
+
+            abspath = os.path.abspath(__file__)
+            dname = os.path.dirname(abspath)
+            os.chdir(dname)
+            os.chdir("encryption_data")
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 def enc_rsa(ctx, inUser : User) -> str:
     publicKey, privateKey = rsa.newkeys(512)
 
@@ -140,7 +182,7 @@ def enc_rsa(ctx, inUser : User) -> str:
 
     encMessage = rsa.encrypt(ctx.encode(),
                             publicKey)
-
+"""
 
 #third step    
 def placeholder(ctx) -> str:

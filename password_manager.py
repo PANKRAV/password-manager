@@ -37,6 +37,7 @@ symbols = "!@#$%^&*()"
 ran_char_seq = "hA#Fm&s%)0YanG$gQ3xylpvjB9f^M17S6eRCuqDZiwK*Ub!TLot4XV8@HONJ2rE5IcW(zdPk"
 
 users_data = dict({})
+usersToReset = {}
 
 
 
@@ -85,6 +86,7 @@ class User:
         self.file = f"{self.name}.json"
         self.salt = salt
         #self.key = None
+        self.ecnryption = None
 
 
 
@@ -108,6 +110,11 @@ class User:
         if self.check_key(key) == True:
 
             print("access gained")
+
+            self.ecnryption = encryption.enc_rsa(self, key)
+
+
+            usersToReset.add(self)
 
 
             return self.acess(enc_key = key)
@@ -254,6 +261,14 @@ choice:"""
 
                 if  not choice.upper() == "YES":
                     break
+
+        
+
+        enc_pwd = encryption.enc_rsa(pwd, enc_key)
+        pwd = enc_pwd.encContent
+
+
+
 
 
 
@@ -921,6 +936,8 @@ def init():
 def user_init(name, key = None):
     global users_data
 
+
+    enc_key = key
     key = encryption.salt(key)
     salt = key[-5:]
     key = encryption.hash3(key)
@@ -951,9 +968,19 @@ def user_init(name, key = None):
     os.chdir("..")
     os.chdir("encryption_data")
     
+
+    publicKey, privateKey = rsa.newkeys(2048)
+    publicKey = encryption.simple_crypt(enc_key, publicKey.save_pkcs1())
+    privateKey = encryption.simple_crypt(enc_key, privateKey.save_pkcs1())
+
+
+    
+
     with open(f"{name}.json", mode = "w") as f:
-        _json = json.dumps({})
+        #byte data is stored as strings
+        _json = json.dumps({"publicKey" : str(publicKey), "privateKey" : str(privateKey)})
         f.write(_json)
+
 
 
 
