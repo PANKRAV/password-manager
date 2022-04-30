@@ -970,18 +970,26 @@ def user_init(name, key = None):
     
 
     publicKey, privateKey = rsa.newkeys(2048)
+
     publicKey = encryption.simple_crypt(enc_key, publicKey.save_pkcs1())
+    publicKey = publicKey.decode("latin-1")
+
     privateKey = encryption.simple_crypt(enc_key, privateKey.save_pkcs1())
+    privateKey = privateKey.decode("latin-1")
 
 
     
+    
 
     with open(f"{name}.json", mode = "w") as f:
-        #byte data is stored as strings
-        _json = json.dumps({"publicKey" : str(publicKey), "privateKey" : str(privateKey)})
+        
+        _json = {"privateKey" : privateKey, "publicKey" : publicKey}
+        _json = json.dumps(_json)
         f.write(_json)
+        
+        
 
-
+    
 
 
     os.chdir("..")

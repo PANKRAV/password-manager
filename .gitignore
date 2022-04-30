@@ -1,6 +1,7 @@
 data/**
 .env
 encryption_data/**
+bibliography.txt
 
 #modules
 __pycache__/
