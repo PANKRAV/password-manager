@@ -35,9 +35,11 @@ upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 numbers = "0123456789"
 symbols = "!@#$%^&*()"
 ran_char_seq = "hA#Fm&s%)0YanG$gQ3xylpvjB9f^M17S6eRCuqDZiwK*Ub!TLot4XV8@HONJ2rE5IcW(zdPk"
+security = 512
+
 
 users_data = dict({})
-usersToReset = {}
+usersToReset = set({})
 
 
 
@@ -111,7 +113,7 @@ class User:
 
             print("access gained")
 
-            self.ecnryption = encryption.enc_rsa(self, key)
+            self.ecnryption = encryption.enc_rsa.User_pwd(self, key)
 
 
             usersToReset.add(self)
@@ -144,6 +146,11 @@ class User:
 
     def get_password(self, acc_name = None, enc_key : str = 0):
 
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        os.chdir(dname)
+        os.chdir("data/passwords")
+        
 
         _json = handle_file(self.file, "json read")
         if acc_name == None:
@@ -158,14 +165,18 @@ account does not exist
 give another name:"""
 )
 
-        pwd = Password.User_pwd(self, acc_name)
+        pwdObj = Password.User_pwd(self, acc_name)
+
+        enc_pwd = encryption.enc_rsa.Single_pwd(self, pwdObj.password, enc_key)
+        pwd = enc_pwd.decContent
+
 
         print(
 f"""
-account name: {pwd.acc_name} 
-email: {pwd.email}
-username: {pwd.username}
-password: {pwd.password}"""
+account name: {pwdObj.acc_name} 
+email: {pwdObj.email}
+username: {pwdObj.username}
+password: {pwd}"""
 )
 
 
@@ -187,6 +198,12 @@ password: {pwd.password}"""
 
 
     def add_password(self, enc_key : str = 0):
+
+        
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        os.chdir(dname)
+        os.chdir("data/passwords")
 
 
         _json = handle_file(self.file, "json read")
@@ -264,8 +281,8 @@ choice:"""
 
         
 
-        enc_pwd = encryption.enc_rsa(pwd, enc_key)
-        pwd = enc_pwd.encContent
+        enc_pwd = encryption.enc_rsa.Single_pwd(self, pwd, enc_key, "new")
+        pwd = enc_pwd.encContent.decode("latin-1")
 
 
 
@@ -273,9 +290,18 @@ choice:"""
 
 
 
+        
 
         _json[acc_name] = {"username" : username, "pwd" : pwd, "email": email}
         _json = json.dumps(_json)
+
+
+
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        os.chdir(dname)
+        os.chdir("data/passwords")
+
 
         with open(self.file, mode = "w") as f:
             f.write(_json)
@@ -301,7 +327,9 @@ account does not exist
 give another name:"""
 )
 
+        enc_pwd = encryption.enc_rsa.Single_pwd(self, pwd, enc_key)
 
+        pwd = enc_pwd.decContent
 
         while True:
 
@@ -315,6 +343,13 @@ email: {pwd.email}
 username: {pwd.username}
 password: {pwd.password}"""
 )
+
+
+
+            abspath = os.path.abspath(__file__)
+            dname = os.path.dirname(abspath)
+            os.chdir(dname)
+            os.chdir("data/passwords")
 
 
 
@@ -423,6 +458,7 @@ choice:"""
                     else:
                         while True:
                             try:
+
                                 length = int(input("give length:"))
                                 break  
 
@@ -443,6 +479,14 @@ choice:"""
 
                         if not choice.upper() == "YES":
                             break
+
+                pwd_text = rsa.encrypt(pwd_text.encode(), enc_pwd.publicKey)
+
+
+                abspath = os.path.abspath(__file__)
+                dname = os.path.dirname(abspath)
+                os.chdir(dname)
+                os.chdir("data/passwords")
 
 
                 _json[acc_name]["pwd"] = pwd_text
@@ -644,6 +688,7 @@ give another name:"""
 
 
     def acess(self, enc_key : str = 0):
+
 
 
         while True:
@@ -969,10 +1014,11 @@ def user_init(name, key = None):
     os.chdir("encryption_data")
     
 
-    publicKey, privateKey = rsa.newkeys(2048)
+    publicKey, privateKey = rsa.newkeys(security)
 
     publicKey = encryption.simple_crypt(enc_key, publicKey.save_pkcs1())
     publicKey = publicKey.decode("latin-1")
+
 
     privateKey = encryption.simple_crypt(enc_key, privateKey.save_pkcs1())
     privateKey = privateKey.decode("latin-1")
@@ -982,11 +1028,12 @@ def user_init(name, key = None):
     
 
     with open(f"{name}.json", mode = "w") as f:
-        
+
         _json = {"privateKey" : privateKey, "publicKey" : publicKey}
         _json = json.dumps(_json)
         f.write(_json)
-        
+    
+    del _json
         
 
     

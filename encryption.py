@@ -3,6 +3,8 @@
 from functools import singledispatchmethod
 from numpy import random as nprand
 from hashlib import sha256
+
+from rsa import PrivateKey, PublicKey
 import rsa
 from secrets import choice
 import cryptography
@@ -14,8 +16,8 @@ from cryptography.fernet import Fernet
 
 
 #utility
-if __name__ == "__main__" : from password_manager import handle_file
-from password_manager import User
+import _utility
+from password_manager import Password, User 
 import os
 
 
@@ -26,7 +28,7 @@ upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 numbers = "0123456789"
 symbols = "!@#$%^&*()"
 ran_char_seq = 'hA#Fm&s%)0YanG$gQ3xylpvjB9f^M17S6eRCuqDZiwK*Ub!TLot4XV8@HONJ2rE5IcW(zdPk'   
-
+security = 512
 
 
 
@@ -111,16 +113,44 @@ class enc_rsa:
     class Single_pwd:
 
 
-        def __init__(self, ctx : str, enc_key):
+        def __init__(self, user : User, ctx : str, enc_key, choice : str = None):
 
-            publicKey, privateKey = rsa.newkeys(512)
             self.enc_key = enc_key
-            self.privateSafe = simple_crypt(self.User.key, privateKey)
-            self.encContent = rsa.encrypt(ctx.encode(),
-                                publicKey)
-            
-            del publicKey, privateKey
+            self.User = user
 
+            abspath = os.path.abspath(__file__)
+            dname = os.path.dirname(abspath)
+            os.chdir(dname)
+            os.chdir("encryption_data")
+
+            enc_json = _utility.handle_file(self.User.file, "json read")
+
+
+            if choice == "new":
+
+                self.publicKey = enc_json["publicKey"]
+                self.publicKey = self.publicKey.encode("latin-1")
+                self.publicKey = simple_crypt(enc_key, self.publicKey, "dec")
+                self.publicKey = rsa.PublicKey.load_pkcs1(self.publicKey)
+                self.publicKey : PublicKey
+
+                self.encContent = rsa.encrypt(ctx.encode("latin-1"),
+                                    self.publicKey)
+            
+            else:
+
+                self.encContent = ctx
+
+            self.privateKey = enc_json["privateKey"]
+            self.privateKey = self.privateKey.encode("latin-1")
+            self.privateKey = simple_crypt(enc_key, self.privateKey, "dec")
+            self.privateKey = rsa.PrivateKey.load_pkcs1(self.privateKey)
+            self.privateKey : PrivateKey
+
+
+            self.decContent = rsa.decrypt(self.encContent, self.privateKey).decode()
+            
+            
 
 
         def revert(self, ctx):
@@ -139,11 +169,24 @@ class enc_rsa:
 
         def __init__(self, User : User, enc_key):
 
-            publicKey, privateKey = rsa.newkeys(2048)
+            publicKey, privateKey = rsa.newkeys(security)
             self.enc_key = enc_key
             self.User = User
-            self.privateSafe = simple_crypt(self.User.key, privateKey)
-            self.puclicSafe = simple_crypt(self.User.key, publicKey)
+
+            abspath = os.path.abspath(__file__)
+            dname = os.path.dirname(abspath)
+            os.chdir(dname)
+            os.chdir("encryption_data")
+
+
+            enc_json = _utility.handle_file(self.User.file, "json read")
+            
+            publicKey = enc_json["publicKey"]
+            publicKey = publicKey.encode("latin-1")
+            publicKey = simple_crypt(enc_key, publicKey, "dec")
+            publicKey = rsa.PublicKey.load_pkcs1(publicKey)
+
+             
 
             self.reset()
 
