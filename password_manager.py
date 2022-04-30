@@ -316,6 +316,13 @@ choice:"""
 
     def modify_password(self, enc_key : str = 0):
 
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        os.chdir(dname)
+        os.chdir("data/passwords")
+
+
+
         _json = handle_file(self.file, "json read")
         acc_name = input("what account is it:")
 
@@ -325,23 +332,25 @@ choice:"""
 """
 account does not exist
 give another name:"""
-)
+)       
 
-        enc_pwd = encryption.enc_rsa.Single_pwd(self, pwd, enc_key)
+        Objpwd = Password.User_pwd(self, acc_name)
+
+        enc_pwd = encryption.enc_rsa.Single_pwd(self, Objpwd.password, enc_key)
 
         pwd = enc_pwd.decContent
 
         while True:
 
 
-            pwd = Password.User_pwd(self, acc_name)
+            
 
             print(
 f"""
-account name: {pwd.acc_name} 
-email: {pwd.email}
-username: {pwd.username}
-password: {pwd.password}"""
+account name: {Objpwd.acc_name} 
+email: {Objpwd.email}
+username: {Objpwd.username}
+password: {pwd}"""
 )
 
 
@@ -481,7 +490,7 @@ choice:"""
                             break
 
                 pwd_text = rsa.encrypt(pwd_text.encode(), enc_pwd.publicKey)
-
+                pwd_text = pwd_text.decode("latin-1")
 
                 abspath = os.path.abspath(__file__)
                 dname = os.path.dirname(abspath)
@@ -534,6 +543,7 @@ choice:"""
 
             elif done == 2:
                 _json = handle_file(self.file, "json read")
+                pwd = Password.User_pwd(self, acc_name)
 
                 continue
 
@@ -614,6 +624,11 @@ give another name:"""
 
     def list_accounts(self):
 
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        os.chdir(dname)
+        os.chdir("data/passwords")
+
         _json = handle_file(self.file, "json read")
 
         if _json == {} or _json == { }:
@@ -636,6 +651,33 @@ give another name:"""
 
 
 
+    def enc_copy(self):
+
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        os.chdir(dname)
+        os.chdir("data/passwords")
+
+        _json = handle_file(self.file, "json read")
+        print(_json)
+
+        input("done? :")
+
+        os.system('cls||clear')
+
+
+
+
+        
+    def dec_copy(self, enc_key):
+
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        os.chdir(dname)
+        os.chdir("data/passwords")
+
+        decUser = encryption.enc_rsa.User_pwd(self, enc_key)
+        
 
 
     """
@@ -746,7 +788,7 @@ choice:"""
 
 
             elif mode == 6:
-                pass
+                self.enc_copy()
 
 
             elif mode == 7:

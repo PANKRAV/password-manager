@@ -16,9 +16,10 @@ from cryptography.fernet import Fernet
 
 
 #utility
-import _utility
+import _utility #user defined
 from password_manager import Password, User 
 import os
+import json
 
 
 #consts
@@ -138,8 +139,14 @@ class enc_rsa:
                                     self.publicKey)
             
             else:
+                
+                self.publicKey = enc_json["publicKey"]
+                self.publicKey = self.publicKey.encode("latin-1")
+                self.publicKey = simple_crypt(enc_key, self.publicKey, "dec")
+                self.publicKey = rsa.PublicKey.load_pkcs1(self.publicKey)
+                self.publicKey : PublicKey
 
-                self.encContent = ctx
+                self.encContent = ctx.encode("latin-1")
 
             self.privateKey = enc_json["privateKey"]
             self.privateKey = self.privateKey.encode("latin-1")
@@ -167,7 +174,7 @@ class enc_rsa:
 
 
 
-        def __init__(self, User : User, enc_key):
+        def __init__(self, User : User, enc_key = None):
 
             publicKey, privateKey = rsa.newkeys(security)
             self.enc_key = enc_key
@@ -179,16 +186,16 @@ class enc_rsa:
             os.chdir("encryption_data")
 
 
-            enc_json = _utility.handle_file(self.User.file, "json read")
+            self.enc_json = _utility.handle_file(self.User.file, "json read")
             
-            publicKey = enc_json["publicKey"]
+            publicKey = self.enc_json["publicKey"]
             publicKey = publicKey.encode("latin-1")
             publicKey = simple_crypt(enc_key, publicKey, "dec")
             publicKey = rsa.PublicKey.load_pkcs1(publicKey)
 
              
 
-            self.reset()
+            
 
 
 
@@ -204,6 +211,16 @@ class enc_rsa:
             os.chdir(dname)
             os.chdir("encryption_data")
 
+
+        def print_data(self):
+
+            dec_json = self.enc_json.copy()
+
+            for el in dec_json :
+
+                el["pwd"] = rsa.decrypt(el["pwd"])
+
+            return json.dumps(dec_json)
 
 
 
