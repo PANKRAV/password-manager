@@ -217,6 +217,10 @@ class enc_rsa:
             os.chdir("encryption_data")
 
 
+
+
+
+
         def print_data(self):
             
             abspath = os.path.abspath(__file__)
@@ -225,6 +229,7 @@ class enc_rsa:
             os.chdir("data/passwords")
 
             _json = handle_file(self.User.file, "json read")
+
 
             dec_json = _json.copy()
 
