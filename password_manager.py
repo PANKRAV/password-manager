@@ -1344,8 +1344,8 @@ def main():
 
 
 
-        print(type(mode))
-        print(os.listdir())
+        
+        
         dirs = os.listdir()
 
         if mode == 1:
