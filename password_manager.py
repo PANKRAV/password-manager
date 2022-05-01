@@ -677,6 +677,8 @@ give another name:"""
         os.chdir("data/passwords")
 
         decUser = encryption.enc_rsa.User_pwd(self, enc_key)
+        decUser : encryption.enc_rsa.User_pwd
+        print(decUser.print_data())
         
 
 
@@ -792,7 +794,7 @@ choice:"""
 
 
             elif mode == 7:
-                pass
+                self.dec_copy(enc_key = enc_key)
 
 
             elif mode == 8:

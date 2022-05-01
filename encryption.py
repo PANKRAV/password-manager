@@ -17,7 +17,7 @@ from cryptography.fernet import Fernet
 
 #utility
 import _utility #user defined
-from password_manager import Password, User 
+from password_manager import Password, User, handle_file 
 import os
 import json
 
@@ -124,12 +124,12 @@ class enc_rsa:
             os.chdir(dname)
             os.chdir("encryption_data")
 
-            enc_json = _utility.handle_file(self.User.file, "json read")
+            self.enc_json = _utility.handle_file(self.User.file, "json read")
 
 
             if choice == "new":
 
-                self.publicKey = enc_json["publicKey"]
+                self.publicKey = self.enc_json["publicKey"]
                 self.publicKey = self.publicKey.encode("latin-1")
                 self.publicKey = simple_crypt(enc_key, self.publicKey, "dec")
                 self.publicKey = rsa.PublicKey.load_pkcs1(self.publicKey)
@@ -140,7 +140,7 @@ class enc_rsa:
             
             else:
                 
-                self.publicKey = enc_json["publicKey"]
+                self.publicKey = self.enc_json["publicKey"]
                 self.publicKey = self.publicKey.encode("latin-1")
                 self.publicKey = simple_crypt(enc_key, self.publicKey, "dec")
                 self.publicKey = rsa.PublicKey.load_pkcs1(self.publicKey)
@@ -148,7 +148,7 @@ class enc_rsa:
 
                 self.encContent = ctx.encode("latin-1")
 
-            self.privateKey = enc_json["privateKey"]
+            self.privateKey = self.enc_json["privateKey"]
             self.privateKey = self.privateKey.encode("latin-1")
             self.privateKey = simple_crypt(enc_key, self.privateKey, "dec")
             self.privateKey = rsa.PrivateKey.load_pkcs1(self.privateKey)
@@ -193,7 +193,12 @@ class enc_rsa:
             publicKey = simple_crypt(enc_key, publicKey, "dec")
             publicKey = rsa.PublicKey.load_pkcs1(publicKey)
 
-             
+            self.privateKey = self.enc_json["privateKey"]
+            self.privateKey = self.privateKey.encode("latin-1")
+            self.privateKey = simple_crypt(enc_key, self.privateKey, "dec")
+            self.privateKey = rsa.PrivateKey.load_pkcs1(self.privateKey)
+            self.privateKey : PrivateKey
+ 
 
             
 
@@ -213,12 +218,21 @@ class enc_rsa:
 
 
         def print_data(self):
+            
+            abspath = os.path.abspath(__file__)
+            dname = os.path.dirname(abspath)
+            os.chdir(dname)
+            os.chdir("data/passwords")
 
-            dec_json = self.enc_json.copy()
+            _json = handle_file(self.User.file, "json read")
 
-            for el in dec_json :
+            dec_json = _json.copy()
 
-                el["pwd"] = rsa.decrypt(el["pwd"])
+            for key, item in dec_json.items() :
+                
+                new_pwd = rsa.decrypt(dec_json[key]["pwd"].encode("latin-1"), self.privateKey)
+
+                dec_json[key]["pwd"] = new_pwd.decode("latin-1")
 
             return json.dumps(dec_json)
 
