@@ -211,17 +211,66 @@ class enc_rsa:
 
         def reset(self):
 
+            _json = self.print_data()
+            _json = json.loads(_json)
+            _json : dict
+
+
+
             abspath = os.path.abspath(__file__)
             dname = os.path.dirname(abspath)
             os.chdir(dname)
             os.chdir("encryption_data")
 
+            self.publicKey, self.privateKey = rsa.newkeys(security)
+
+            publicKey = self.publicKey
+            privateKey = self.privateKey
+
+            publicKey = simple_crypt(self.enc_key, publicKey.save_pkcs1())
+            publicKey = publicKey.decode("latin-1")
+
+
+            privateKey = simple_crypt(self.enc_key, privateKey.save_pkcs1())
+            privateKey = privateKey.decode("latin-1")
+
+
+
+            
+            
+
+            with open(f"{self.User.name}.json", mode = "w") as f:
+
+                new_json = {"privateKey" : privateKey, "publicKey" : publicKey}
+                new_json = json.dumps(new_json)
+                f.write(new_json)
+            
+            del new_json
+
+
+            os.chdir("..")
+            os.chdir("data/passwords")
+
+            new_json = _json.copy()
+
+            for key, item in new_json.items() :
+                
+                new_pwd = rsa.encrypt(new_json[key]["pwd"].encode("latin-1"), self.privateKey)
+                new_pwd = new_pwd.decode("latin-1")
+
+                new_json[key]["pwd"] = new_pwd
+
+
+            with open(f"{self.User.name}.json", mode = "w") as f:
+
+                new_json = json.dumps(new_json)
+                f.write(new_json)
 
 
 
 
 
-        def print_data(self):
+        def print_data(self) -> str:
             
             abspath = os.path.abspath(__file__)
             dname = os.path.dirname(abspath)

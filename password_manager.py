@@ -259,6 +259,7 @@ choice:"""
             if mode == 2:
 
                 pwd = input("whats your password:")
+                break
 
             else:
                 while True:
@@ -1113,7 +1114,10 @@ def user_init(name, key = None):
 
 def _quit() -> None:
 
-    #kialla polla pramata
+    for user in usersToReset:
+        user : User
+
+        user.ecnryption.reset()
 
 
 
@@ -1323,6 +1327,7 @@ def main():
     handle_file("passwords.json", "create json")
     
     while True:
+
         mode = input("mode:\n1.new user\n2.user\n3.exit\nchoice:")
 
         while not isinstance(mode, int) or not (str(mode) in ["1", "2", "3"]):
@@ -1526,7 +1531,7 @@ def main():
 
 
         elif mode == 3:
-            break
+            _quit()
 
 
 
