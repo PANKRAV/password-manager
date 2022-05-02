@@ -1345,9 +1345,10 @@ def main():
 
 
         
-        
-        dirs = os.listdir()
 
+        dirs = os.listdir()
+        os.system('cls||clear')
+        
         if mode == 1:
             name = input("name:")
             while True:
