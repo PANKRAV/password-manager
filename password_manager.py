@@ -35,7 +35,7 @@ upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 numbers = "0123456789"
 symbols = "!@#$%^&*()"
 ran_char_seq = "hA#Fm&s%)0YanG$gQ3xylpvjB9f^M17S6eRCuqDZiwK*Ub!TLot4XV8@HONJ2rE5IcW(zdPk"
-security = 512
+security = 256
 
 
 users_data = dict({})
@@ -334,14 +334,31 @@ choice:"""
 account does not exist
 give another name:"""
 )       
-
+        
         Objpwd = Password.User_pwd(self, acc_name)
 
         enc_pwd = encryption.enc_rsa.Single_pwd(self, Objpwd.password, enc_key)
-
-        pwd = enc_pwd.decContent
-
+        
         while True:
+
+            abspath = os.path.abspath(__file__)
+            dname = os.path.dirname(abspath)
+            os.chdir(dname)
+            os.chdir("data/passwords")
+
+            Objpwd = Password.User_pwd(self, acc_name)
+
+            enc_pwd = encryption.enc_rsa.Single_pwd(self, Objpwd.password, enc_key)
+
+            pwd = enc_pwd.decContent
+
+            abspath = os.path.abspath(__file__)
+            dname = os.path.dirname(abspath)
+            os.chdir(dname)
+            os.chdir("data/passwords")
+
+            _json = handle_file(self.file, "json read")
+
 
 
             
@@ -401,6 +418,7 @@ choice:"""
                         break
 
                 _json[change_text] = _json.pop(acc_name)
+                acc_name = change_text
 
 
 
@@ -513,6 +531,13 @@ choice:"""
 
             else:
                 pass
+            
+
+            abspath = os.path.abspath(__file__)
+            dname = os.path.dirname(abspath)
+            os.chdir(dname)
+            os.chdir("data/passwords")
+
 
             _json = json.dumps(_json)
             with open(self.file, mode = "w") as f:
@@ -543,9 +568,11 @@ choice:"""
 
 
             elif done == 2:
-                _json = handle_file(self.file, "json read")
-                pwd = Password.User_pwd(self, acc_name)
+                #I really dont remember why I added those 2 lines
+                #_json = handle_file(self.file, "json read")
+                #pwd = Password.User_pwd(self, acc_name)
 
+                os.system('cls||clear')
                 continue
 
 
@@ -680,6 +707,10 @@ give another name:"""
         decUser = encryption.enc_rsa.User_pwd(self, enc_key)
         decUser : encryption.enc_rsa.User_pwd
         print(decUser.print_data())
+
+        input("done? :")
+
+        os.system('cls||clear')
         
 
 
