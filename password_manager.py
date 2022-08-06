@@ -13,6 +13,7 @@ from msilib.schema import Error
 import math
 from ast import Pass
 import pyautogui as pg
+from _utility import timeit
 
 
 #cryptography

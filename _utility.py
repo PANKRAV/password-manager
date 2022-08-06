@@ -1,5 +1,21 @@
 import json
+import random
+import time
 
+
+
+def timeit(func : function):
+    start_t = time.time
+    x = func()
+    t = time.time - start_t
+
+    if t < 1:
+        time.sleep(random.randint(1,3))
+    else:
+        delay = random.randint(0, t&5) + random.randint(1, 2)
+        time.sleep(delay)
+
+    return x 
 
 
 
