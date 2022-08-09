@@ -12,6 +12,7 @@ from cgitb import text
 from msilib.schema import Error
 import math
 from ast import Pass
+from .encryption import random_password_new
 import pyautogui as pg
 from _utility import timeit
 
@@ -272,7 +273,7 @@ choice:"""
 
                         length = input("choice needs to be an integer\nnew choice:")
 
-                pwd = random_password(length)
+                pwd = random_password_new(length)
                 print(f"your password is {pwd}")
 
 
@@ -496,7 +497,7 @@ choice:"""
                                 length = input("choice needs to be an integer\nnew choice:")
 
 
-                        pwd_text = random_password(length)
+                        pwd_text = random_password_new(length)
 
                         print(f"your password is {pwd_text}")
 
