@@ -1,7 +1,7 @@
 #modules
 #encryption
 from functools import singledispatchmethod
-from numpy import random as nprand
+from numpy import character, random as nprand
 from hashlib import sha256
 
 from rsa import PrivateKey, PublicKey
@@ -404,4 +404,78 @@ def random_password(length = 10):
 
 
 
+
+def random_password_new(length = 10):
+    pr = []
+    last = None
+    password = []
+
+    char_list = [char for char in chars]
+    lower_list = [char for char in lower]
+    upper_list = [char for char in upper]
+    numbers_list = [char for char in numbers]
+    symbols_list = [char for char in symbols]
+
+    const = 1/len(char_list)
+
+    for char in char_list:
+        
+        if char in lower_list:
+            pr.append(0.2/len(lower_list))
+
+
+        elif char in upper_list:
+            pr.append(0.2/len(upper_list))
+
+
+        elif char in numbers_list:
+            pr.append(0.3/len(numbers_list)) 
+
+        
+        elif char in symbols_list:
+            pr.append(0.3/len(symbols_list)) 
+
+    for i in length:        
+        char = nprand.choice(char_list, p = pr, size = 1) 
+
+        if char in lower_list:
+            if last == 1 and repeat == True:
+                i -= 1
+                repeat = False
+                continue
+            else:
+                last = 1
+
+        
+        elif char in upper_list:
+            if last == 2 and repeat == True:
+                i -= 1
+                repeat = False
+                continue
+            else:
+                last = 2
+
+        
+        elif char in numbers_list:
+            if last == 3 and repeat == True:
+                i -= 1
+                repeat = False
+                continue
+            else:
+                last = 3
+
+        
+        elif char in symbols_list:
+            if last == 4 and repeat == True:
+                i -= 1
+                repeat = False
+                continue
+            else:
+                last = 4
+        
+        password.append(char)
+        repeat = True
+
+
+    return "".join(password)
 
