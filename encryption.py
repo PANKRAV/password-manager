@@ -3,6 +3,7 @@
 from functools import singledispatchmethod
 from numpy import character, random as nprand
 from hashlib import sha256
+import numpy as np
 
 from rsa import PrivateKey, PublicKey
 import rsa
@@ -435,47 +436,47 @@ def random_password_new(length = 10):
         elif char in symbols_list:
             pr.append(0.3/len(symbols_list)) 
 
-    for i in length:        
+    for i in range(length):        
         char = nprand.choice(char_list, p = pr, size = 1) 
 
         if char in lower_list:
             if last == 1 and repeat == True:
-                i -= 1
+                char = nprand.choice(char_list, p = pr, size = 1)
                 repeat = False
-                continue
+                
             else:
                 last = 1
 
         
         elif char in upper_list:
             if last == 2 and repeat == True:
-                i -= 1
+                char = nprand.choice(char_list, p = pr, size = 1)
                 repeat = False
-                continue
+                
             else:
                 last = 2
 
         
         elif char in numbers_list:
             if last == 3 and repeat == True:
-                i -= 1
+                char = nprand.choice(char_list, p = pr, size = 1)
                 repeat = False
-                continue
+                
             else:
                 last = 3
 
         
         elif char in symbols_list:
             if last == 4 and repeat == True:
-                i -= 1
+                char = nprand.choice(char_list, p = pr, size = 1)
                 repeat = False
-                continue
+                
             else:
                 last = 4
         
         password.append(char)
         repeat = True
 
-
+    password = np.concatenate(password).ravel().tolist()
     return "".join(password)
 

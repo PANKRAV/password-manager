@@ -4,7 +4,7 @@ import time
 
 
 
-def timeit(func : function):
+def timeit(func):
     start_t = time.time
     x = func()
     t = time.time - start_t
